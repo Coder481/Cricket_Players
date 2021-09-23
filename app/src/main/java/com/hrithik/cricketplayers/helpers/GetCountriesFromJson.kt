@@ -1,61 +1,32 @@
-package com.hrithik.cricketplayers
+package com.hrithik.cricketplayers.helpers
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import com.hrithik.cricketplayers.databinding.ActivityMainBinding
+import com.hrithik.cricketplayers.model.Country
+import com.hrithik.cricketplayers.model.Player
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
-import java.net.URL
-import java.util.concurrent.Executors
 
-class MainActivity : AppCompatActivity() {
+/**
+ * This is a helper class which helps to parse JSON data (fetched from URL) into the kotlin models
+ */
+class GetCountriesFromJson {
 
-    private lateinit var b: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        b = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(b.root)
-
-        val url = "https://test.oye.direct/players.json"
-
-        // Executor to handle long running task on background/worker thread
-        val executor = Executors.newSingleThreadExecutor()
-        val handler = Handler(Looper.getMainLooper())
-
-        executor.execute {
-
-            // Perform background task here
-            val jsonStr = URL(url).readText()
-
-            handler.post {
-                // Perform MainThread task here
-                showData(jsonStr)
-            }
-        }
-
-
-    }
-
-    // todo: Create a separate class for this function
-    private fun showData(jsonStr: String) {
+    fun get(jsonStr: String) : List<Country> {
 
         // Convert json string to JSONObject
         val jsonObject = JSONObject(jsonStr)
 
-        // Get all the names of the countries as JSONArray
-        val jsonNamesArray = jsonObject.names() ?: return
-
         val listOfCountries = ArrayList<Country>()
+
+        // Get all the names of the countries as JSONArray
+        val jsonNamesArray = jsonObject.names() ?: return listOfCountries
+
 
         // Iterate through the JSONArray to get the players' data
         for (i in 0 until jsonNamesArray.length()){
 
             // name of the country
-            val name = jsonNamesArray[0] as String
+            val name = jsonNamesArray[i] as String
 
             // JSONArray of all the players
             val playersJsonArray : JSONArray = jsonObject[name] as JSONArray
@@ -92,8 +63,7 @@ class MainActivity : AppCompatActivity() {
             listOfCountries.add(country)
         }
 
-        val msg = "${listOfCountries[0].name}-->${listOfCountries[0].players[0]}"
-        b.textV.text = msg
+        return listOfCountries
     }
 
 }

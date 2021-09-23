@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Cricket Players</string>
+    <string name="moveToPlayersArrow">moveToPlayersArrow</string>
+    <string name="sorry_no_data_found">Sorry, No Data Found!</string>
+    <string name="sort_players">Sort Players</string>
+    <string name="sort_by_first_name">Sort By First Name</string>
+    <string name="sort_by_last_name">Sort By Last Name</string>
 </resources>
